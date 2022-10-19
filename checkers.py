@@ -1,31 +1,55 @@
-import sys, pygame
-import board
+import os
 
-C_BLACK = (155,0,0)
-C_RED = (255,0,0)
+ROWS = 8
+COLS = 8
 
-WINDOW = (400,400)
-SCREEN = pygame.display.set_mode(WINDOW)
-BACKGROUND = pygame.Surface(WINDOW)
+board = [[' ' for i in range(COLS)] for j in range(ROWS)]
+pieces = []
 
-def draw_screen(board: board.Board) -> None:
-    for i in range(8):
-        for j in range(8):
-            c = C_BLACK
-            if (j % 2 != 0): c = C_RED
-            pygame.draw.rect(BACKGROUND, c, 
-                            (i*50,j*50,40,40))
-    SCREEN.blit(BACKGROUND,(0,0))
-    pygame.display.flip()
+red = []
+black = []
+
+class Piece():
+    row = None
+    col = None
+    color = None
+
+    def __init__(self, _row, _col, _color):
+        self.row = _row
+        self.col = _col
+        self.color = _color
+
+
+def print_board():
+    for x in board:
+        print(*x)
+
+def gen_pieces():
+    i = 0
+    for y in range(3):
+        if i == 1: i = 0
+        else: i = 1
+        for x in range(i, 8, 2):
+            p = Piece(x,y, 'red')
+            pieces.append(p)
+    i = 1
+    for y in range(5, 8):
+        if i == 1: i = 0
+        else: i = 1
+        for x in range(i, 8, 2):
+            p = Piece(x,y, 'black')
+            pieces.append(p)
+    return
+
+def gen_board():
+    gen_pieces()
+    for x in pieces:
+        board[x.col][x.row] = 'o' if x.color == 'red' else 'x'
 
 def main():
-    pygame.init()
-    b = board.Board()
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
-        draw_screen(b)
+    gen_board()
+    print_board()
+    return
 
 if __name__ == "__main__":
     main()

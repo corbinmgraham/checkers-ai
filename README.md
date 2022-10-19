@@ -1,4 +1,4 @@
-#checkers-ai
+# checkers-ai
 
 Checkers AI
 
