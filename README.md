@@ -1,9 +1,10 @@
-# checkers-ai
+#checkers-ai
+
 Checkers AI
 
 ## Satisfying Dependencies
 
-[] pygame
+- [x] pygame
 
 ## Using
 
