@@ -1,55 +1,106 @@
 import os
 
-ROWS = 8
-COLS = 8
+class Node:
+    def __init__(self) -> None:
+        pass
 
-board = [[' ' for i in range(COLS)] for j in range(ROWS)]
-pieces = []
-
-red = []
-black = []
-
-class Piece():
-    row = None
-    col = None
-    color = None
-
-    def __init__(self, _row, _col, _color):
-        self.row = _row
-        self.col = _col
+class Piece:
+    def __init__(self, _color):
         self.color = _color
+    def __str__(self):
+        return ("r" if self.color == "red" else "b")
 
+class Tile:
+    def __init__(self, _p=None) -> None:
+        if _p: self.val = _p
+        else: self.val = None
+        pass
 
-def print_board():
-    for x in board:
-        print(*x)
+    def __str__(self):
+        if self.val: return str(self.val)
+        return '-'
 
-def gen_pieces():
-    i = 0
-    for y in range(3):
-        if i == 1: i = 0
-        else: i = 1
-        for x in range(i, 8, 2):
-            p = Piece(x,y, 'red')
-            pieces.append(p)
-    i = 1
-    for y in range(5, 8):
-        if i == 1: i = 0
-        else: i = 1
-        for x in range(i, 8, 2):
-            p = Piece(x,y, 'black')
-            pieces.append(p)
-    return
+class Board:
+    b = [[], [], [], [], [], [], [], []]
+    def __init__(self):
+        self.gen_board()
 
-def gen_board():
-    gen_pieces()
-    for x in pieces:
-        board[x.col][x.row] = 'o' if x.color == 'red' else 'x'
+    def __self__(self):
+        return self.b
+
+    def gen_board(self):
+        for i in self.b:
+            for j in range(8):
+                i.append(Tile())
+
+        def gen_black():
+            for i in range(3):
+                for j in range(8):
+                    if (i + j) % 2 == 1:
+                        self.b[i][j] = Tile(Piece("black"))
+
+        def gen_red():
+            for i in range(5, 8, 1):
+                for j in range(8):
+                    if (i + j) % 2 == 1:
+                        self.b[i][j] = Tile(Piece("red"))
+
+        gen_black()
+        gen_red()
+            
+    def print_board(self):
+        for i in range(8):
+            for j in range(8):
+                x = self.b[i][j]
+                print(f"{x}{i}{j}", end=" ")
+            print()
+
+    def move(self, x):
+        start = x[0]
+        end = x[1]
+        if self.b[start[0]][start[1]]:
+            if str(self.b[end[0]][end[1]]) == '-':
+                return "Valid move."
+            print(self.b[end[0]][end[1]])
+        return "Invalid Move."
+
+class Game:
+    def __init__(self) -> None:
+        self.start()
+
+    def start(self):
+        self.board = Board()
+        self.game_loop()
+        return
+
+    def game_loop(self):
+        print("Type \'q\' to quit.")
+        msg = None
+        while(True):
+            # self.clear()
+            self.board.print_board()
+            if msg: print(msg)
+            msg = None
+            print("Input [s:xy] [d:xy]: ", end="")
+            x = input()
+            if x == 'q':
+                break
+            else:
+                try:
+                    x = (int(x[0]), int(x[1])), (int(x[3]), int(x[4]))
+                    # msg = f"{self.board.b[x[0][0]][x[0][1]]}, {x}"
+                    msg = self.board.move(x)
+                except:
+                    msg = "Invalid Input. Try again."
+
+    def clear(self):
+        if os.name == 'nt':
+            os.system('cls')
+        else:
+            os.system('clear')
 
 def main():
-    gen_board()
-    print_board()
-    return
+    game = Game()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
